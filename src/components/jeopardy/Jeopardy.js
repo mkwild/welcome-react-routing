@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 //import our service
 import JeopardyService from "../../jeopardyService";
+import JeopardyDisplay from "./JeopardyDisplay"
 
 class Jeopardy extends Component {
   //set our initial state and set up our service as this.client on this component
@@ -8,7 +9,25 @@ class Jeopardy extends Component {
     super(props);
     this.client = new JeopardyService();
     this.state = {
-      data: {},
+      data: {
+        "id": null,
+        "answer": "",
+        "question": "",
+        "value": null,
+        "airdate": "",
+        "created_at": "",
+        "updated_at": "",
+        "category_id": null,
+        "game_id": null,
+        "invalid_count": null,
+        "category": {
+            "id": null,
+            "title": "",
+            "created_at": "",
+            "updated_at": "",
+            "clues_count": null
+            }
+        },
       score: 0,
       userAnswer: ""
     }
@@ -35,7 +54,7 @@ class Jeopardy extends Component {
   handleSubmit = (event) => {
       event.preventDefault()
 
-      if (this.state.userAnswer.toLowerCase() == this.state.data.answer.toLowerCase()) {
+      if (this.state.userAnswer.toLowerCase() === this.state.data.answer.toLowerCase()) {
         let points = this.state.data.value
         let newScore = this.state.score + points
         this.setState({
@@ -55,34 +74,30 @@ class Jeopardy extends Component {
   //display the results on the screen
   render() {
 
-    let category = "loading"
-    if(this.state.data && this.state.data.category) {
-        category = this.state.data.category.title
-    }
-
     return (
-      <div>
-        <strong>Score: </strong> {this.state.score}
-        <br/>
-        <strong>Category: </strong> {category}
-        <br/>
-        <strong>Value: </strong> {this.state.data.value}
-        <br/>
-        <strong>Question: </strong> {this.state.data.question}
-        <br/>
-        <form onSubmit={this.handleSubmit}>
-            <div>
-                <label htmlFor="userAnswer">Answer: </label>
-                <input
-                    type="text"
-                    name="userAnswer"
-                    value={this.state.userAnswer}
-                    onChange={this.handleChange}
-                />
-            </div>
-            <button>Submit Answer</button>
-        </form>
-      </div>
+        <JeopardyDisplay score={this.state.score} category={this.state.data.category.title} value={this.state.data.value} question={this.state.data.question} answer={this.state.data.answer} handleSubmit={this.handleSubmit} handleChange={this.handleChange} userAnswer={this.state.userAnswer} />
+    //   <div>
+    //     <strong>Score: </strong> {this.state.score}
+    //     <br/>
+    //     <strong>Category: </strong> {category}
+    //     <br/>
+    //     <strong>Value: </strong> {this.state.data.value}
+    //     <br/>
+    //     <strong>Question: </strong> {this.state.data.question}
+    //     <br/>
+    //     <form onSubmit={this.handleSubmit}>
+    //         <div>
+    //             <label htmlFor="userAnswer">Answer: </label>
+    //             <input
+    //                 type="text"
+    //                 name="userAnswer"
+    //                 value={this.state.userAnswer}
+    //                 onChange={this.handleChange}
+    //             />
+    //         </div>
+    //         <button>Submit Answer</button>
+    //     </form>
+    //   </div>
     );
   }
 }
