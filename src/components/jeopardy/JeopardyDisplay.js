@@ -5,8 +5,6 @@ class JeopardyDisplay extends Component {
     render() {
         return(
             <div>
-                <strong>Score: </strong> {this.props.score}
-                <br/>
                 <strong>Category: </strong> {this.props.category}
                 <br/>
                 <strong>Value: </strong> {this.props.value}
@@ -25,6 +23,8 @@ class JeopardyDisplay extends Component {
                     </div>
                     <button>Submit Answer</button>
                 </form>
+                <br/>
+                <strong>Score: </strong> {this.props.score}
             </div>
         )
     }

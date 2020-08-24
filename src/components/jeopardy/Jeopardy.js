@@ -9,7 +9,7 @@ class Jeopardy extends Component {
     super(props);
     this.client = new JeopardyService();
     this.state = {
-      data: {
+      data: [{
         "id": null,
         "answer": "",
         "question": "",
@@ -28,21 +28,81 @@ class Jeopardy extends Component {
             "clues_count": null
             }
         },
-      score: 0,
-      userAnswer: ""
+        {
+            "id": null,
+            "answer": "",
+            "question": "",
+            "value": null,
+            "airdate": "",
+            "created_at": "",
+            "updated_at": "",
+            "category_id": null,
+            "game_id": null,
+            "invalid_count": null,
+            "category": {
+                "id": null,
+                "title": "",
+                "created_at": "",
+                "updated_at": "",
+                "clues_count": null
+                }
+        },
+        {
+            "id": null,
+            "answer": "",
+            "question": "",
+            "value": null,
+            "airdate": "",
+            "created_at": "",
+            "updated_at": "",
+            "category_id": null,
+            "game_id": null,
+            "invalid_count": null,
+            "category": {
+                "id": null,
+                "title": "",
+                "created_at": "",
+                "updated_at": "",
+                "clues_count": null
+                }
+        },
+        ],
+    score: 0,
+    userAnswer: "",
+    categorySelected: false
     }
   }
   //get a new random question from the API and add it to the data object in state
   getNewQuestion() {
     return this.client.getQuestion().then(result => {
       this.setState({
-        data: result.data[0]
+        data: result.data
       })
+      console.log(this.state.data)
     })
   }
   //when the component mounts, get the first question
   componentDidMount() {
     this.getNewQuestion();
+  }
+  //when user selects the category
+  handleSelectCategory = (event) => {
+    let selection = event.target.name
+    let newData = this.state.data
+    if(selection === "0") {
+        newData = this.state.data[0]
+    }
+    else if(selection === "1") {
+        newData = this.state.data[1]
+    }
+    else if (selection === "2") {
+        newData = this.state.data[2]
+    }
+    console.log(newData)
+    this.setState({
+        data: newData,
+        categorySelected: true
+    })
   }
   //when user types an answer for the question into the form
   handleChange = (event) => {
@@ -69,36 +129,85 @@ class Jeopardy extends Component {
         })
         alert(`The correct answer was ${this.state.data.answer}`)
       }
+      this.setState({
+        data: [{
+            "id": null,
+            "answer": "",
+            "question": "",
+            "value": null,
+            "airdate": "",
+            "created_at": "",
+            "updated_at": "",
+            "category_id": null,
+            "game_id": null,
+            "invalid_count": null,
+            "category": {
+                "id": null,
+                "title": "",
+                "created_at": "",
+                "updated_at": "",
+                "clues_count": null
+                }
+            },
+            {
+                "id": null,
+                "answer": "",
+                "question": "",
+                "value": null,
+                "airdate": "",
+                "created_at": "",
+                "updated_at": "",
+                "category_id": null,
+                "game_id": null,
+                "invalid_count": null,
+                "category": {
+                    "id": null,
+                    "title": "",
+                    "created_at": "",
+                    "updated_at": "",
+                    "clues_count": null
+                    }
+            },
+            {
+                "id": null,
+                "answer": "",
+                "question": "",
+                "value": null,
+                "airdate": "",
+                "created_at": "",
+                "updated_at": "",
+                "category_id": null,
+                "game_id": null,
+                "invalid_count": null,
+                "category": {
+                    "id": null,
+                    "title": "",
+                    "created_at": "",
+                    "updated_at": "",
+                    "clues_count": null
+                    }
+            },
+            ],
+        categorySelected: false
+      })
       this.getNewQuestion()
   }
   //display the results on the screen
   render() {
-
-    return (
-        <JeopardyDisplay score={this.state.score} category={this.state.data.category.title} value={this.state.data.value} question={this.state.data.question} answer={this.state.data.answer} handleSubmit={this.handleSubmit} handleChange={this.handleChange} userAnswer={this.state.userAnswer} />
-    //   <div>
-    //     <strong>Score: </strong> {this.state.score}
-    //     <br/>
-    //     <strong>Category: </strong> {category}
-    //     <br/>
-    //     <strong>Value: </strong> {this.state.data.value}
-    //     <br/>
-    //     <strong>Question: </strong> {this.state.data.question}
-    //     <br/>
-    //     <form onSubmit={this.handleSubmit}>
-    //         <div>
-    //             <label htmlFor="userAnswer">Answer: </label>
-    //             <input
-    //                 type="text"
-    //                 name="userAnswer"
-    //                 value={this.state.userAnswer}
-    //                 onChange={this.handleChange}
-    //             />
-    //         </div>
-    //         <button>Submit Answer</button>
-    //     </form>
-    //   </div>
-    );
+    if(!this.state.categorySelected) {
+        return (
+            <div>
+                <button name="0" onClick={this.handleSelectCategory}>{this.state.data[0].category.title}</button>
+                <button name="1" onClick={this.handleSelectCategory}>{this.state.data[1].category.title}</button>
+                <button name="2" onClick={this.handleSelectCategory}>{this.state.data[2].category.title}</button>
+            </div>
+        )
+    }
+    else{
+        return (
+            <JeopardyDisplay score={this.state.score} category={this.state.data.category.title} value={this.state.data.value} question={this.state.data.question} answer={this.state.data.answer} handleSubmit={this.handleSubmit} handleChange={this.handleChange} userAnswer={this.state.userAnswer} />
+        );
+    }
   }
 }
 
