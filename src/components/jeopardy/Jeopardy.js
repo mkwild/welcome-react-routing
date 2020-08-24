@@ -98,7 +98,6 @@ class Jeopardy extends Component {
     else if (selection === "2") {
         newData = this.state.data[2]
     }
-    console.log(newData)
     this.setState({
         data: newData,
         categorySelected: true
